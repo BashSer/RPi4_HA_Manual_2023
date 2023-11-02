@@ -108,10 +108,13 @@ sudo docker rm homeassistant
   https://github.com/home-assistant/os-agent/releases
     
   *(Скачать aarch64 и не использовать armv7 в данном случае)*
+```
+wget https://github.com/home-assistant/os-agent/releases/download/1.6.0/os-agent_1.6.0_linux_aarch64.deb
+```
     
   2. Устанавливаем командой:
 ```
-sudo dpkg -i os-agent_1.0.0_linux_x86_64.deb
+sudo dpkg -i os-agent_1.6.0_linux_aarch64.deb
 ```
   >[!NOTE]
   >Можно проверить правильность установки
@@ -127,14 +130,25 @@ sudo dpkg -i os-agent_1.0.0_linux_x86_64.deb
 ```
 wget -O homeassistant-supervised.deb https://github.com/home-assistant/supervised-installer/releases/latest/download/homeassistant-supervised.deb
 sudo apt install ./homeassistant-supervised.deb
+sudo reboot now
 ```
 
 Готово. Заходим на ```http://<host>:8123``` (host=IP RPi4) и приступаем к первичной настройке Home Assistant.
 
->[!NOTE]
+> [!NOTE]
 >Первый запуск в скриншотах - 7 ~~нажатий next~~ шагов к успеху
 >https://www.home-assistant.io/getting-started/onboarding/
 ---
+
+> [!NOTE]
+> Если в HA будет предупреждение `Unsupported system - AppArmor issues`, то это можно починить так:
+> ```
+>sudo nano /boot/cmdline.txt
+> ```
+> в конце дописать `lsm=apparmor`, сохранить <kbd>Ctrl</kbd> + <kbd>S</kbd>, закрыть <kbd>Ctrl</kbd> + <kbd>X</kbd> и выполнить полную перезагрузку:
+> ```
+> sudo reboot now
+> ```
 
 > [!IMPORTANT]
 > Если запущен контейнер Portainer, то Home Assistant будет жаловаться о неправильной конфигурации и отказываться устанавливать некоторые аддоны. Достаточно остановить Portainer и максимум перезагрузить контейнер Supervised(сам HA перезагружаться не будет). После установки можно включить Portainer, а в HA прожать игнорировать на данном предупреждении. Пока не изучал почему так. Благо можн за раз всё установить и больше этого не делать.
