@@ -8,6 +8,17 @@
 * [Установка Raspberry Pi OS Lite (64-bit, CLI, Not GUI) на Raspberry Pi 3/4/400/5 x64](#iso)
 * [Обновление и базовая конфигурация OS](#OS)
 * [Установка HA, включая Supervised и Addons в виде контейнера на Raspberry Pi 4 x64 Lite(CLI, Not GUI)](#software)
+  * [Возникшие проблемы](#problems)
+* [Установка Addons](#addons)
+  * [HACS (Home Assistant Community Store)](#HACS)
+  * [MQTT Mosquitto](#MQTT)
+  * [Zigbee2MQTT](#zigbee)
+  * [Node-RED](#node-red)
+  * [ESPhome](#esphome)
+  * [MQTT-io](#mqtt-io)
+  * []()
+  * []()
+* [Установка интеграций](#integrations)
 
 ---
 
@@ -41,6 +52,7 @@ sudo reboot now
 _добавить про перепрошивку?_
 
 ---
+
 
 <a name="software"></a>
 ### Установка HA, включая Supervised и Addons в виде контейнеров на Raspberry Pi 4 x64 Lite(CLI, Not GUI)
@@ -101,6 +113,7 @@ sudo docker rm homeassistant
 ```
   4. Запускаем обновлённый контейнер командой из установки выше.
 
+
 ### Устанавливаем OS-Agent по инструкции https://github.com/home-assistant/os-agent/tree/main#using-home-assistant-supervised-on-debian:
 
   1. Скачиваем последний релиз отсюда:
@@ -138,7 +151,11 @@ sudo reboot now
 > [!NOTE]
 >Первый запуск в скриншотах - 7 ~~нажатий next~~ шагов к успеху
 >https://www.home-assistant.io/getting-started/onboarding/
+
 ---
+
+<a name="problems"></a>
+###Возникшие проблемы:
 
 > [!NOTE]
 > Если в HA будет предупреждение `Unsupported system - AppArmor issues`, то это можно починить так:
@@ -155,9 +172,96 @@ sudo reboot now
 
 ---
 
+<a name="addons"></a>
 ## Установка дополнений:
-- [ ] HACS (Home Assistant Community Store - установка дополнений прямо из гитхаба) https://hacs.xyz/
-- [ ] MQTT Mosquitto (MQTT-брокер)
-- [ ] Zigbee2MQTT (поддержка zigbee через MQTT без проприетарных хабов\мостов, даже дешёвый USB-свисток подойдёт). Список поддерживаемых адаптеров - https://www.zigbee2mqtt.io/guide/adapters/
-- [ ] File-editor(?)
-- [ ] SSH(?)
+>[!WARNING]
+>Не забудьте включить "Расширенный режим" в настройках профиля.
+
+<a name="HACS"></a>
+- [x] HACS (Home Assistant Community Store)
+  https://hacs.xyz/
+  >[!NOTE]
+  >Требуется учётная запись github
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Найти `Terminal & SSH`
+  - Установить, Веб-интерфейс
+  - `wget -O - https://get.hacs.xyz | bash -` (<kbd>CTRL</kbd> + <kbd>SHIFT</kbd> + <kbd>V</kbd>)
+  - Перезагрузить Home Assistant
+  - Зайти в веб-интерфейс Home Assistant
+  >[!WARNING]
+  >Обновить страницу с чисткой кэша <kbd>CTRL</kbd> + <kbd>F5</kbd>
+  - Настройки -> Устройства и службы
+  - Внизу справа Добавить интеграцию
+  - Найти `HACS`
+  - Ознакомиться со всеми пунктами и Подтвердить
+  - Открыть ссылку подключения github и ввести предоставленный код авторизации в своей учётной записи
+  - Готово. Теперь в боковй меню появился пункт `HACS`
+
+<a name="MQTT"></a>
+- [X] MQTT Mosquitto (MQTT-брокер)
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Найти `Mosquitto broker`
+  - Установить, Запустить
+  >[!NOTE]
+  > | Port | Description |
+  > | :----: | :---------: |
+  > | `1883` | Normal MQTT |
+  > | `1884` | MQTT over WebSocket |
+  > | `8883` | Normal MQTT with SSL |
+
+
+<a name="zigbee"></a>
+- [X] Zigbee2MQTT
+  >[!NOTE]
+  >https://www.zigbee2mqtt.io/
+  >https://github.com/zigbee2mqtt/hassio-zigbee2mqtt#installation
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Наверху справа открыть меню в виде трёх точек и выбрать Репозитории
+  - Вставить ссылку `https://github.com/zigbee2mqtt/hassio-zigbee2mqtt` и Добавить
+  >[!WARNING]
+  >Обновить страницу с чисткой кэша <kbd>CTRL</kbd> + <kbd>F5</kbd>
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Найти `Zigbee2MQTT`(master ветка, стабильная, редко обновляется) или `Zigbee2MQTT Edge`(dev ветка, часто обновляется, удобно во время тестов при решении Issue)
+  - Установить, Конфигурация
+  - В блоке `serial:` вписать порт USB в который установлен zigbee-свисток `port: /dev/ttyUSB0`
+  - Запустить
+
+<a name="file-editor"></a>
+- [X] File-editor
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Найти `File editor`
+  - Установить
+  - Готово
+  >[!NOTE]
+  >Можно включить отоборажение на боковой панели слева
+
+<a name="node-red"></a>
+- [ ] Node-RED
+  >[!WARNING]
+  > Требуется SSL ?
+  - Настройки -> Дополнения
+  - Внизу справа Магазин дополнений
+  - Найти `Node-RED`
+  - Установить
+
+<a name="esphome"></a>
+- [ ] ESPHome(?)(Раньше для ПЕРВОГО запуска требовалась ESP подключенная по USB - поправили?)
+
+
+<a name="mqtt-io"></a>
+- [ ] MQTT-IO(что-то новое?)
+
+
+- [ ] AppDaemon(?)(Python Apps and Dashboard)
+- [ ] Duck DNS(?)
+- [ ] Let's Encrypt(?)
+- [ ] Rclone Backup(?)
+
+
+<a name="integrations"></a>
+- [ ] 
